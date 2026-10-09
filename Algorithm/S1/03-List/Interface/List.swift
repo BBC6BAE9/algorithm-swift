@@ -19,7 +19,7 @@ protocol List {
     associatedtype E
     
     /// 元素的数量
-    var _size: Int { get set }
+    var _size: Int { get }
     
     /// 清除所有元素
     func clear()
