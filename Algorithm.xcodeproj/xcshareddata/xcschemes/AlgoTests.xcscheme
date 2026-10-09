@@ -20,9 +20,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F1F110B02D76B2C200527D54"
-               BuildableName = "AlgoTests.xctest"
-               BlueprintName = "AlgoTests"
-               ReferencedContainer = "container:Algo.xcodeproj">
+               BuildableName = "AlgorithmTests.xctest"
+               BlueprintName = "AlgorithmTests"
+               ReferencedContainer = "container:Algorithm.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
