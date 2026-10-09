@@ -8,17 +8,19 @@
 import Foundation
 
 /// 链表
-/// 动态数组有一个明显的缺点，就是可能会造成内存空间的大量浪费，能否用到多少内存就使用多少内存？链表就可以用到这一点，链表是一种链式存储的线性表，所有的内存地址不一定是连续的
+/// 动态数组有一个明显的缺点，就是可能会造成内存空间的大量浪费，能否用到多少内存就使用多少内存？
+/// 链表就可以用到这一点，链表是一种链式存储的线性表，所有的内存地址不一定是连续的
+
 class LinkedList<E: Equatable> {
     
-    var _size: Int = 0
+    private(set) var _size: Int = 0
 
-    var first: Node<E>?
+    private(set) var first: Node<E>?
     
     /// 获取index位置对应的节点对象
     private func node(index: Int) -> Node<E>? {
         
-        rangeCheckForAdd(index: index)
+        rangeCheck(index: index)
         
         var node: Node<E>? = self.first
         
@@ -27,14 +29,14 @@ class LinkedList<E: Equatable> {
         }
         
         return node
-        
     }
     
     /// 节点
     class Node<T> {
-        var element: T
-        var next: Node<T>?
         
+        fileprivate(set) var element: T
+        fileprivate(set) var next: Node<T>?
+
         init(element: T, next: Node<T>?) {
             self.element = element
             self.next = next
