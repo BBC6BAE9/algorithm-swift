@@ -9,6 +9,17 @@ import Testing
 
 struct LinkedListTests {
 
+    @Test("读取 index == size 的位置时应触发越界错误")
+    func getAtSizeRejectsOutOfBoundsIndex() async {
+        await #expect(processExitsWith: .failure) {
+            let list = LinkedList<Int>()
+            list.add(element: 10)
+
+            // 只有一个元素，合法索引是 0，size() 返回的 1 已经越界。
+            _ = list.get(index: list.size())
+        }
+    }
+
     @Test func testAdd1() async throws {
         let arrList = LinkedList<Int>()
         arrList.add(element: 11)
