@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// 用Swift 的高级数组模拟早期变成语言中数组的有限能力
+// 用Swift 的高级数组模拟早期变成语言中数组的有限能力
 class FixedSizeArray<E> {
     
     private var elements: [E?]
@@ -16,7 +16,6 @@ class FixedSizeArray<E> {
         self.elements = [E?](repeating: nil, count: capacity)
     }
     
-    // TODO: 这个地方是不是需要把返回值改成E
     subscript(index: Int) -> E? {
         get {
             checkBounds(index)
@@ -38,7 +37,6 @@ class FixedSizeArray<E> {
         return elements.count
     }
     
-    /// 检查边界值
     private func checkBounds(_ index: Int) {
         // Check if index is valid
         guard index >= 0 && index < elements.count else {

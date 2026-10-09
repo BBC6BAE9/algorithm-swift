@@ -19,12 +19,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		F14BE15A2D69803700694250 /* Algo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Algo; sourceTree = BUILT_PRODUCTS_DIR; };
-		F1F110B12D76B2C200527D54 /* AlgoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlgoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F14BE15A2D69803700694250 /* Algorithm */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Algorithm; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1F110B12D76B2C200527D54 /* AlgorithmTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlgorithmTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		F1F1111C2D76B31200527D54 /* Exceptions for "Algo" folder in "AlgoTests" target */ = {
+		F1F1111C2D76B31200527D54 /* Exceptions for "Algorithm" folder in "AlgorithmTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"S1/00-Complexity/Fibonacci.swift",
@@ -84,17 +84,17 @@
 				"S2/01-Sort/Sort.swift",
 				"S2/03-Graph/ListGraph.swift",
 			);
-			target = F1F110B02D76B2C200527D54 /* AlgoTests */;
+			target = F1F110B02D76B2C200527D54 /* AlgorithmTests */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		F1F1105D2D76B27900527D54 /* Algo */ = {
+		F1F1105D2D76B27900527D54 /* Algorithm */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				F1F1111C2D76B31200527D54 /* Exceptions for "Algo" folder in "AlgoTests" target */,
+				F1F1111C2D76B31200527D54 /* Exceptions for "Algorithm" folder in "AlgorithmTests" target */,
 			);
-			path = Algo;
+			path = Algorithm;
 			sourceTree = "<group>";
 		};
 		F1F110B22D76B2C200527D54 /* AlgoTests */ = {
@@ -125,7 +125,7 @@
 		F14BE1512D69803700694250 = {
 			isa = PBXGroup;
 			children = (
-				F1F1105D2D76B27900527D54 /* Algo */,
+				F1F1105D2D76B27900527D54 /* Algorithm */,
 				F1F110B22D76B2C200527D54 /* AlgoTests */,
 				F14BE15B2D69803700694250 /* Products */,
 			);
@@ -134,8 +134,8 @@
 		F14BE15B2D69803700694250 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F14BE15A2D69803700694250 /* Algo */,
-				F1F110B12D76B2C200527D54 /* AlgoTests.xctest */,
+				F14BE15A2D69803700694250 /* Algorithm */,
+				F1F110B12D76B2C200527D54 /* AlgorithmTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -143,9 +143,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F14BE1592D69803700694250 /* Algo */ = {
+		F14BE1592D69803700694250 /* Algorithm */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F14BE1612D69803700694250 /* Build configuration list for PBXNativeTarget "Algo" */;
+			buildConfigurationList = F14BE1612D69803700694250 /* Build configuration list for PBXNativeTarget "Algorithm" */;
 			buildPhases = (
 				F14BE1562D69803700694250 /* Sources */,
 				F14BE1572D69803700694250 /* Frameworks */,
@@ -156,18 +156,18 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				F1F1105D2D76B27900527D54 /* Algo */,
+				F1F1105D2D76B27900527D54 /* Algorithm */,
 			);
-			name = Algo;
+			name = Algorithm;
 			packageProductDependencies = (
 			);
 			productName = Algo;
-			productReference = F14BE15A2D69803700694250 /* Algo */;
+			productReference = F14BE15A2D69803700694250 /* Algorithm */;
 			productType = "com.apple.product-type.tool";
 		};
-		F1F110B02D76B2C200527D54 /* AlgoTests */ = {
+		F1F110B02D76B2C200527D54 /* AlgorithmTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F1F110B52D76B2C200527D54 /* Build configuration list for PBXNativeTarget "AlgoTests" */;
+			buildConfigurationList = F1F110B52D76B2C200527D54 /* Build configuration list for PBXNativeTarget "AlgorithmTests" */;
 			buildPhases = (
 				F1F110AD2D76B2C200527D54 /* Sources */,
 				F1F110AE2D76B2C200527D54 /* Frameworks */,
@@ -180,11 +180,11 @@
 			fileSystemSynchronizedGroups = (
 				F1F110B22D76B2C200527D54 /* AlgoTests */,
 			);
-			name = AlgoTests;
+			name = AlgorithmTests;
 			packageProductDependencies = (
 			);
 			productName = AlgoTests;
-			productReference = F1F110B12D76B2C200527D54 /* AlgoTests.xctest */;
+			productReference = F1F110B12D76B2C200527D54 /* AlgorithmTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -205,7 +205,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F14BE1552D69803700694250 /* Build configuration list for PBXProject "Algo" */;
+			buildConfigurationList = F14BE1552D69803700694250 /* Build configuration list for PBXProject "Algorithm" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -219,8 +219,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F14BE1592D69803700694250 /* Algo */,
-				F1F110B02D76B2C200527D54 /* AlgoTests */,
+				F14BE1592D69803700694250 /* Algorithm */,
+				F1F110B02D76B2C200527D54 /* AlgorithmTests */,
 			);
 		};
 /* End PBXProject section */
@@ -426,7 +426,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F14BE1552D69803700694250 /* Build configuration list for PBXProject "Algo" */ = {
+		F14BE1552D69803700694250 /* Build configuration list for PBXProject "Algorithm" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F14BE15F2D69803700694250 /* Debug */,
@@ -435,7 +435,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F14BE1612D69803700694250 /* Build configuration list for PBXNativeTarget "Algo" */ = {
+		F14BE1612D69803700694250 /* Build configuration list for PBXNativeTarget "Algorithm" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F14BE1622D69803700694250 /* Debug */,
@@ -444,7 +444,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F1F110B52D76B2C200527D54 /* Build configuration list for PBXNativeTarget "AlgoTests" */ = {
+		F1F110B52D76B2C200527D54 /* Build configuration list for PBXNativeTarget "AlgorithmTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1F110B62D76B2C200527D54 /* Debug */,
