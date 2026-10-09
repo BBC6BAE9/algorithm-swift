@@ -11,7 +11,7 @@ import Foundation
 /// 使用双向链表可以提升链表的综合性能
 class DoubleLinkedList<E: Equatable> {
     
-    var _size: Int = 0
+    private(set) var _size: Int = 0
 
     private var first: Node<E>?
     
@@ -20,7 +20,7 @@ class DoubleLinkedList<E: Equatable> {
     /// 获取index位置对应的节点对象
     private func node(index: Int) -> Node<E>? {
         
-        rangeCheckForAdd(index: index)
+        rangeCheck(index: index)
         
         if index < _size >> 1 {
             var node: Node<E>? = self.first
@@ -41,7 +41,7 @@ class DoubleLinkedList<E: Equatable> {
     class Node<T> {
         var element: T
         var next: Node<T>?
-        var prev: Node<T>?
+        weak var prev: Node<T>?
 
         init(prev: Node<T>?, element: T, next: Node<T>?) {
             self.element = element
@@ -61,6 +61,7 @@ extension DoubleLinkedList: List {
     func clear() {
         _size = 0
         self.first = nil
+        self.last = nil
     }
     
     func get(index: Int) -> E? {
