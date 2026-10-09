@@ -10,19 +10,19 @@ import Foundation
 /// 双向循环链表
 class CircleDoubleLinkedList<E: Equatable> {
     
-    var _size: Int = 0
+    private(set) var _size: Int = 0
 
     private var first: Node<E>?
     
     private var last: Node<E>?
     
     ///【约瑟夫问题】【成员变量】current指针，指向某个节点
-    var current: Node<E>?
+    private(set) var current: Node<E>?
     
     /// 获取index位置对应的节点对象
     private func node(index: Int) -> Node<E>? {
         
-        rangeCheckForAdd(index: index)
+        rangeCheck(index: index)
         
         if index < _size >> 1 {
             var node: Node<E>? = self.first
@@ -41,9 +41,9 @@ class CircleDoubleLinkedList<E: Equatable> {
     
     /// 节点
     class Node<T> {
-        var element: T
-        var next: Node<T>?
-        var prev: Node<T>?
+        fileprivate(set) var element: T
+        fileprivate(set) var next: Node<T>?
+        fileprivate(set) var prev: Node<T>?
 
         init(prev: Node<T>?, element: T, next: Node<T>?) {
             self.element = element
@@ -55,14 +55,29 @@ class CircleDoubleLinkedList<E: Equatable> {
             // print("node \(element) 被释放")
         }
     }
+
+    deinit {
+        clear()
+    }
     
 }
 
 extension CircleDoubleLinkedList: List {
     
     func clear() {
+        // 循环结构中的引用不会自动释放，逐个断开前后连接。
+        var node = first
+        for _ in 0..<_size {
+            let next = node?.next
+            node?.next = nil
+            node?.prev = nil
+            node = next
+        }
+
         _size = 0
-        self.first = nil
+        first = nil
+        last = nil
+        current = nil
     }
     
     func get(index: Int) -> E? {
@@ -123,12 +138,14 @@ extension CircleDoubleLinkedList: List {
     }
 
     private func remove(node: Node<E>?) -> E? {
+        guard let node, _size > 0 else { return nil }
+
+        let next = node.next
         if _size == 1 {
             first = nil
             last = nil
         }else{
-            let prev = node?.prev
-            let next = node?.next
+            let prev = node.prev
             prev?.next = next
             next?.prev = prev
             
@@ -142,7 +159,14 @@ extension CircleDoubleLinkedList: List {
         }
         
         _size -= 1
-        return node?.element
+        // 按索引删除当前节点时，也需要把游标移到后继节点。
+        if node === current {
+            current = _size == 0 ? nil : next
+        }
+
+        node.next = nil
+        node.prev = nil
+        return node.element
     }
 }
 
@@ -162,19 +186,7 @@ extension CircleDoubleLinkedList {
 
     /// 【约瑟夫问题】【函数】remove() 删除current指向的节点，删除成功后让current指向下一个节点
     func remove() -> E? {
-        if current == nil { return nil }
-        
-        let next = current?.next;
-        let element = remove(node: current)
-        
-        if _size == 0 {
-            current = nil
-        }else{
-            current = next
-        }
-        
-        return element
+        return remove(node: current)
     }
     
 }
-

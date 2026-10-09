@@ -10,14 +10,18 @@ import Foundation
 // 单向循环链表
 class CircleLinkedList<E: Equatable> {
     
-    var _size: Int = 0
+    private(set) var _size: Int = 0
 
     private var first: Node<E>?
+
+    deinit {
+        clear()
+    }
     
     /// 获取index位置对应的节点对象
     private func node(index: Int) -> Node<E>? {
         
-        rangeCheckForAdd(index: index)
+        rangeCheck(index: index)
         
         var node: Node<E>? = self.first
         
@@ -49,6 +53,13 @@ class CircleLinkedList<E: Equatable> {
 extension CircleLinkedList: List {
     
     func clear() {
+        var node = first
+        for _ in 0..<_size {
+            let next = node?.next
+            node?.next = nil
+            node = next
+        }
+
         _size = 0
         self.first = nil
     }
@@ -64,7 +75,6 @@ extension CircleLinkedList: List {
         return old
     }
     
-    // TODO: 需要修改
     func remove(index: Int) -> E? {
         rangeCheck(index: index)
         
@@ -83,11 +93,11 @@ extension CircleLinkedList: List {
             prev?.next = tmpnode?.next
         }
         
+        tmpnode?.next = nil
         _size -= 1
         return tmpnode?.element
     }
     
-    // TODO: 需要修改
     func add(index: Int, element: E) {
         rangeCheckForAdd(index: index)
         
