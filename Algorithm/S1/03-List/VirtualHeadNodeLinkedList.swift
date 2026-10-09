@@ -11,9 +11,9 @@ import Foundation
 /// 有的时候为了让代码更加精简，统一所有节点的处理逻辑，可以在最前面增加一个虚拟的头节点（不存储数据）
 class VirtualHeadNodeLinkedList<E: Equatable> {
     
-    var _size: Int = 0
+    private(set) var _size: Int = 0
 
-    private var first: Node<E?>?
+    private let first: Node<E?>
     
     init() {
         first = Node(element: nil, next: nil)
@@ -22,9 +22,9 @@ class VirtualHeadNodeLinkedList<E: Equatable> {
     /// 获取index位置对应的节点对象
     private func node(index: Int) -> Node<E?>? {
         
-        rangeCheckForAdd(index: index)
+        rangeCheck(index: index)
         
-        var node: Node<E?>? = self.first?.next
+        var node: Node<E?>? = self.first.next
         
         for _ in 0..<index {
             node = node?.next
@@ -54,7 +54,7 @@ extension VirtualHeadNodeLinkedList: List {
     
     func clear() {
         _size = 0
-        self.first = nil
+        self.first.next = nil
     }
     
     func get(index: Int) -> E? {
@@ -89,7 +89,7 @@ extension VirtualHeadNodeLinkedList: List {
     }
     
     func indexOf(element: E) -> Int {
-        var node = first
+        var node = first.next
         for i in 0..<_size {
             if element == node?.element {
                 return i
