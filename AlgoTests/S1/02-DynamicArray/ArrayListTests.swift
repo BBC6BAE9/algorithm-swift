@@ -40,6 +40,24 @@ struct ArrayListTests {
         assert(ret == want, "array size want \(want), but got \(ret ?? -1)")
         assert(arrList.size() == 4, "array size want \(want), but got \(ret ?? -1)")
     }
+
+    @Test("默认容量下，删除首元素后应保留剩余的 6 个元素")
+    func testRemoveFromSevenElements() {
+        let arrList = ArrayList<Int>()
+        for i in 0..<7 {
+            arrList.add(element: i)
+        }
+        #expect(arrList.size() == 7)
+
+        // 回归场景：删除后剩余 6 个元素，不能把容量从 10 缩到 5。
+        let removed = arrList.remove(index: 0)
+
+        #expect(removed == 0)
+        #expect(arrList.size() == 6)
+        for index in 0..<6 {
+            #expect(arrList.get(index: index) == index + 1)
+        }
+    }
     
     
     @Test func testAdd4() async throws {
@@ -83,4 +101,3 @@ struct ArrayListTests {
     }
 
 }
-

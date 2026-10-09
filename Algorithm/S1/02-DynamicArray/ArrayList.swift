@@ -12,7 +12,7 @@ import Foundation
 class ArrayList<E: Equatable> {
     
     /// 元素的数量
-    var _size: Int = 0
+    private(set) var _size: Int = 0
     
     /// 所有的元素
     private var elements: [E?]
@@ -25,15 +25,16 @@ class ArrayList<E: Equatable> {
     }
     
     /// 动态扩容
-    func ensureCapacity(capacity: Int) {
+    private func ensureCapacity(capacity: Int) {
         let oldCapacity = elements.count
-        if oldCapacity > capacity {
+        if oldCapacity >= capacity {
             return
         }
+
         // 扩容1.5倍
         // 位运算，右移一位，相当于除以2
         // 扩容倍数和所容倍数的乘积如果是1，会出现复杂度震荡，避开即可
-        let newCapacity = oldCapacity + (oldCapacity >> 1)
+        let newCapacity = max(capacity, oldCapacity + (oldCapacity >> 1))
         var newElements = [E?](repeating: nil, count: newCapacity)
         
         for i in 0..<_size {
@@ -45,11 +46,12 @@ class ArrayList<E: Equatable> {
     }
     
     /// 缩容
-    // TODO: 缩容量的这个函数可能有Bug，需要完善测试用例来检查
     private func trim() {
         let capacity = elements.count
-        let newCapacity = capacity >> 1;
-        if (_size >= (newCapacity) && capacity > DEFAULT_CAPACITY ) { return }
+        let newCapacity = max(DEFAULT_CAPACITY, capacity >> 1)
+        if capacity <= DEFAULT_CAPACITY || _size >= newCapacity {
+            return
+        }
         
         print("trim: size = \(_size), old capacity = \(capacity), new capacity = \(newCapacity)")
 
