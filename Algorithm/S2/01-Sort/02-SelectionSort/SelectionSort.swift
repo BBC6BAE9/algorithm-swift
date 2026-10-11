@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// 选择排序
+/// 💡从序列中找出最大的那个元素，然后与最末尾的元素交换位置
 class SelectionSort<E:Comparable>: Sort<E> {
     
     override func sort() {

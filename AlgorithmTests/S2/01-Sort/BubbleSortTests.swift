@@ -9,6 +9,21 @@ import Testing
 
 struct BubbleSortTests {
 
+    @Test func testBubbleSortXXXX() async throws {
+        
+        var input = [10, 9, 29, 28, 37, 56, 34]
+                
+        let bs = BubbleSort<Int>()
+
+        bs.sort(array: &input)
+        
+        let ret = input
+        
+        let want = [9, 10, 28, 29, 34, 37, 56]
+
+        assert(ret == want)
+    }
+    
     @Test func testBubbleSort() async throws {
         
         var input = [10, 9, 29, 28, 37, 56, 34]
