@@ -7,6 +7,7 @@
 
 import Foundation
 
+// 💡
 class BinarySearch {
     
     /// 查找V在有序数组array中的位置

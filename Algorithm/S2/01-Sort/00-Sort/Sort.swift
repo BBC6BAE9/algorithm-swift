@@ -77,22 +77,11 @@ class Sort<E: Comparable>  {
     // 排序算法是否稳定
     var isStatble: Bool {
         // TODO: 评测算法是否稳定S2P2
+        
         return true
     }
 }
 
-/// 冒泡排序
-func bubbleSort(array: inout [Int]){
-    for end in (1..<array.count).reversed() {
-        for begin in 1...end {
-            if array[begin] < array[begin - 1] {
-                let tmp = array[begin]
-                array[begin] = array[begin - 1]
-                array[begin - 1] = tmp
-            }
-        }
-    }
-}
 
 /// 冒泡排序优化1
 /// 思路：如果给出的序列已经完全有序，可以提前终止冒泡排序

@@ -7,6 +7,17 @@
 
 import Foundation
 
+/// 堆排序是对选择排序的一种优化
+/// 堆能让你快速找到当前的最大值或最小值。 HeapSort 用的是“大顶堆”。
+
+/// 💡
+///  1、对序列进行原地建堆（heapify）
+///  2、重复执行以下操作，知道堆的数量元素为1
+///     - 交换堆顶的元素与尾元素
+///     - 堆的数量减1
+///     - 对0位置进行一次siftdown的操作
+
+// TODO: Heap需要复习
 class HeapSort<E: Comparable>: Sort<E> {
     
     private var heapSize: Int = 0
@@ -66,7 +77,4 @@ class HeapSort<E: Comparable>: Sort<E> {
         
         array[index] = element
     }
-    
-    
-    
 }
