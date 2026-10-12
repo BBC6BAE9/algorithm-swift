@@ -62,7 +62,9 @@ class Solution20 {
                 stack.push(element: char)
             }
             
-            if right(c: char) && pair(l: top, r: char) {
+            if right(c: char) {
+                // 右括号必须与栈顶的左括号配对，否则直接不合法
+                if !pair(l: top, r: char) { return false }
                 _ = stack.pop()
             }
         }

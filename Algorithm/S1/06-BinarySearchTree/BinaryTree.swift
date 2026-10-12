@@ -148,7 +148,7 @@ class BinaryTree<T: Comparable>  {
             return 0
         }
         let left = height(node: node?.left)
-        let right = height(node: node?.left)
+        let right = height(node: node?.right)
         return 1 + max(left, right)
     }
     
@@ -171,7 +171,7 @@ class BinaryTree<T: Comparable>  {
         }
         
         // 从父节点、祖父节点中寻找前驱节点
-        while(node?.parent != nil && node == node?.parent?.left){
+        while(node?.parent != nil && node === node?.parent?.left){
             node = node?.parent
         }
         
@@ -185,17 +185,17 @@ class BinaryTree<T: Comparable>  {
             return nil
         }
         
-        // 前驱节点在左子树中（right.left.left.left...）
-        if let leftNode = node?.right {
-            var p: Node<T>? = leftNode
-            while (p?.right != nil){
+        // 后继节点在右子树中（right.left.left.left...）
+        if let rightNode = node?.right {
+            var p: Node<T>? = rightNode
+            while (p?.left != nil){
                 p = p?.left
             }
             return p
         }
         
-        // 从父节点、祖父节点中寻找前驱节点
-        while(node?.parent != nil && node == node?.parent?.right){
+        // 从父节点、祖父节点中寻找后继节点
+        while(node?.parent != nil && node === node?.parent?.right){
             node = node?.parent
         }
         
@@ -213,7 +213,8 @@ class BinaryTree<T: Comparable>  {
         var element: E
         var left: Node<E>?
         var right: Node<E>?
-        var parent: Node<E>?
+        // 子节点由父节点强引用，反向引用使用weak，避免循环引用导致整棵树无法释放
+        weak var parent: Node<E>?
         
         init(element: E, parent: Node<E>?) {
             self.element = element
@@ -232,12 +233,12 @@ class BinaryTree<T: Comparable>  {
         
         /// 当前节点是否是父节点的左子节点
         func isLeftChild() -> Bool {
-            return parent != nil && self == parent?.left
+            return parent != nil && self === parent?.left
         }
         
         /// 当前节点是否是父节点的右子节点
         func isRightChild() -> Bool {
-            return parent != nil && self == parent?.right
+            return parent != nil && self === parent?.right
         }
         
         /// 访问兄弟节点

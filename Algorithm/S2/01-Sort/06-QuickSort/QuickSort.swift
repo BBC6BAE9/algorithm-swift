@@ -8,7 +8,8 @@
 import Foundation
 /// 💡
 /// 1、从序列中选出一个轴点元素（piovt）
-///  - 每次选择当前区间 begin 位置的元素为轴点元素
+///  - 随机选一个元素与 begin 位置交换，再以 begin 位置的元素为轴点元素
+///  - 固定取 begin 时，有序序列会退化成 O(n^2)，递归深度 O(n) 可能栈溢出
 
 /// 2、利用piovt将序列分成两个子序列
 ///  - 将小于piovt的元素放在piovt前面
@@ -41,6 +42,8 @@ class QuickSort<E: Comparable>: Sort<E> {
     func piovtIndex(begin: Int, end: Int) -> Int {
         var begin = begin
         var end = end
+        // 随机选择轴点，避免有序序列导致最坏情况
+        swap(i1: begin, i2: Int.random(in: begin..<end))
         // 备份begin位置的元素
         let pivot =  array[begin]
         end -= 1

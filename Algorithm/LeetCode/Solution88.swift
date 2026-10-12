@@ -18,7 +18,7 @@ extension Solution {
         var cur = nums1.count - 1
         
         while (i2 >= 0) {
-            if (i1 > 0 && nums2[i2] < nums1[i1]) {
+            if (i1 >= 0 && nums2[i2] < nums1[i1]) {
                 nums1[cur] = nums1[i1]
                 i1 -= 1
                 cur -= 1
