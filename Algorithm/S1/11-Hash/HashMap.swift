@@ -1,422 +1,378 @@
-////
-////  HashMap.swift
-////  Algo
-////
-////  Created by hong on 5/19/25.
-////
 //
-//import Foundation
+//  HashMap.swift
+//  Algo
 //
-//// 容量要求是2的幂，我们选16，也可以表示为1<<4
-//let DEFAULT_INITIAL_CAPACITY: Int = 16
+//  Created by hong on 5/19/25.
 //
-///// 自己实现一个Hash表
-///// 注：value直接使用红黑树进行存储（JDK中如果哈希表的容量>=64且单向链表的节点数量大于8时，存储结构会从单向链表转为红黑树）
-//public class HashMap<K: Hashable, V: Equatable> : MapProtocol {
-//    
-//    private var size: Int = 0
-//    
-//    private var table: FixedSizeArray<Node<K, V>?> = .init(capacity: DEFAULT_INITIAL_CAPACITY)
-//    
-//    func getSize() -> Int {
-//        return size
-//    }
-//    
-//    func isEmpty() -> Bool {
-//        return size == 0
-//    }
-//    
-//    func clear() {
-//        if size == 0 { return }
-//        
-//        size = 0
-//        
-//        for i in 0..<table.size() {
-//            table[i] = nil
-//        }
-//    }
-//    
-//    func put(key: K?, value: V) -> V? {
-//        // TODO: 这个地方先简单处理成非空
-//        guard let key = key else { return nil }
-//        
-//        let index = index(key: key)
-//        // 取出index位置的红黑树根节点
-//        
-//        var root = table[index]!
-//        
-//        // 根节点的处理
-//        if root == nil {
-//            let tmpRoot = Node(key: key, value: value, parent: nil)
-//            root = tmpRoot
-//            table[index] = root
-//            size += 1
-//            afterPut(node: tmpRoot)
-//            return nil
-//        }
-//        
-//        // 添加新的节点到红黑树上
-//        
-//        var node: Node<K, V>? = root
-//        var parent: Node<K, V> = root!
-//        var cmp: Int = 0
-//        
-//        let h1 = key.hashValue
-//        
-//        while node != nil {
-//            
-//            parent = node!
-//            
-//            // 添加的不是第一个节点
-//            cmp = compare(k1: key, k2: node!.key, h1: h1, h2: node!.hash)
-//            if cmp > 0 {
-//                node = node!.right
-//            } else if cmp < 0 {
-//                node = node!.left
-//            } else {
-//                // 相等，说明元素重复，直接返回
-//                node!.key = key
-//                let oldValue: V = node!.value
-//                node!.value = value
-//                return oldValue
-//            }
-//        }
-//        
-//        let newNode: Node<K, V> = Node(key: key, value: value, parent: parent)
-//        
-//        if cmp > 0 {
-//            parent.right = newNode
-//        }else{
-//            parent.left = newNode
-//        }
-//        
-//        size += 1
-//        afterPut(node: newNode)
-//        return nil
-//    }
-//    
-//    func get(key: K) -> V? {
-//        return nil
-//    }
-//    
-//    func remove(key: K) {
-//        
-//    }
-//    
-//    func containsKey(key: K) -> Bool {
-//        return false
-//    }
-//    
-//    func containsValue(value: V?) -> Bool {
-//        return false
-//    }
-//    
-//    private class Node<K1:Hashable, V1: Equatable> : Equatable{
-//        
-//        var hash: Int
-//        var key: K1
-//        var value: V1
-//        var color: Bool = RED
-//        
-//        var left: Node<K1, V1>?
-//        var right: Node<K1, V1>?
-//        var parent: Node<K1, V1>?
-//        
-//        init(key: K1, value: V1, parent: Node<K1, V1>?) {
-//            self.key = key
-//            self.hash = key.hashValue
-//            self.value = value
-//            self.parent = parent
-//        }
-//        
-//        /// 是否是叶子节点
-//        func isLeaf() -> Bool {
-//            return left == nil && right == nil
-//        }
-//        
-//        /// 是否有两个子节点
-//        func hasTwoChildren() -> Bool {
-//            return left != nil && right != nil
-//        }
-//        
-//        /// 当前节点是否是父节点的左子节点
-//        func isLeftChild() -> Bool {
-//            return parent != nil && self == parent?.left
-//        }
-//        
-//        /// 当前节点是否是父节点的右子节点
-//        func isRightChild() -> Bool {
-//            return parent != nil && self == parent?.right
-//        }
-//        
-//        /// 访问兄弟节点
-//        func sibling() -> Node<K1, V1>? {
-//            if isLeftChild() {
-//                return parent?.right
-//            }
-//            
-//            if isRightChild() {
-//                return parent?.left
-//            }
-//            
-//            return nil
-//        }
-//        
-//        static func == (lhs: Node<K1, V1>, rhs: Node<K1, V1>) -> Bool {
-//            return (lhs.key == rhs.key) && (lhs.value == rhs.value)
-//        }
-//        
-//    }
-//    
-//    /// 根据key生成索引（在桶数组中的位置）
-//    private func index(key: K?) -> Int {
-//        guard let key = key else {
-//            return 0
-//        }
-//        let hash = key.hashValue
-//        // hash >> 16的意思是高16位和低16位进行位运算，是为了得到更加均匀的哈希
-//        return (hash ^ (hash >> 16)) & (table.length - 1)
-//    }
-//     
-//    /// 比较两个元素的大小
-//    /// - Returns: 0代表两个元素相等 大于0代表e1大于e2 返回值小于0代表e1小于e2
-//    /// - Parameters:
-//    ///   - k1:
-//    ///   - k2:
-//    ///   - h1: k1的hashcode
-//    ///   - h2: k2的hashcode
-//    private func compare(k1: K,
-//                         k2: K,
-//                         h1: Int,
-//                         h2: Int) -> Int
-//    {
-//        // TODO: 这里其实是简单的处理了一下K，让他不为空，和原课程的可空有一些出入
-//
-//        // 先比较hash值
-//        let result = h1 - h2
-//        
-//        if result != 0  {
-//            return result
-//        }
-//        
-//        // hash值相等，比较equals
-//        if (k1 == k2) {
-//            return 0
-//        }
-//
-//        return result
-//    }
-//    
-//    private func afterRemove(node: Node<K, V>)
-//    {
-//        
-//        if isRed(node) {
-//            _ = black(node)
-//            return
-//        }
-//        
-//        let parent = node.parent
-//        
-//        // 删除的是根节点
-//        if (parent == nil) {
-//            return
-//        }
-//        
-//        // 删除的是黑色的叶子节点【下溢】
-//        let left = parent?.left == nil || node.isLeftChild();
-//        
-//        var sibling = left ? parent?.right : parent?.left
-//        if (left) { // 被删除的节点在左边，兄弟节点在右边
-//            if isRed(sibling) {
-//                _ = black(sibling)
-//                _ = red(parent)
-//                rotateLeft(parent)
-//                
-//                //更换兄弟
-//                sibling = parent?.right
-//            }
-//            
-//            if(isBlack(sibling?.left) && isBlack(sibling?.right)) { // 兄弟节点没有一个红色子节点
-//                
-//                let parentBlack = isBlack(parent)
-//                
-//                _ = black(parent)
-//                _ = red(sibling)
-//                if parentBlack {
-//                    afterRemove(node: parent!)
-//                }
-//            } else { // 兄弟节点至少有一个是红色节点, 向兄弟节点借元素
-//                // 兄弟节点的左边是黑色
-//                if(isBlack(sibling?.right)) {
-//                    rotateRight(sibling)
-//                    sibling = parent?.right
-//                }
-//                
-//                _ = color(node: sibling, color: colorOf(parent))
-//                _ = black(sibling?.right)
-//                _ = black(parent)
-//                
-//                rotateLeft(parent)
-//            }
-//        } else { // 被删除的节点在右边，兄弟节点在左边
-//            if isRed(sibling) {
-//                _ = black(sibling)
-//                _ = red(parent)
-//                rotateRight(parent)
-//                
-//                //更换兄弟
-//                sibling = parent?.left
-//            }
-//            
-//            if(isBlack(sibling?.left) && isBlack(sibling?.right)) { // 兄弟节点没有一个红色子节点
-//                
-//                let parentBlack = isBlack(parent)
-//                
-//                _ = black(parent)
-//                _ = red(sibling)
-//                if parentBlack {
-//                    afterRemove(node: parent!)
-//                }
-//            } else { // 兄弟节点至少有一个是红色节点, 向兄弟节点借元素
-//                // 兄弟节点的左边是黑色
-//                if(isBlack(sibling?.left)) {
-//                    rotateLeft(sibling)
-//                    sibling = parent?.left
-//                }
-//                
-//                _ = color(node: sibling, color: colorOf(parent))
-//                _ = black(sibling?.left)
-//                _ = black(parent)
-//                
-//                rotateRight(parent)
-//            }
-//        }
-//    }
-//    
-//    private func afterPut(node: Node<K, V>) {
-//        let parent = node.parent
-//        
-//        // 添加的是根节点或者上溢到达了根节点
-//        guard let parent = parent else {
-//            _ = black(node)
-//            return
-//        }
-//        
-//        // 如果父节点是黑色，直接返回
-//        if isBlack(parent) { return }
-//        
-//        // 叔父节点
-//        let uncle = parent.sibling()
-//        
-//        // 祖父节点
-//        let grand = parent.parent
-//        
-//        if isRed(uncle) { // 叔父节点是红色【上溢】
-//            _ = black(parent)
-//            _ = black(uncle)
-//            
-//            afterPut(node: red(grand)!)
-//            return
-//        }
-//        
-//        // 叔父节点不是红色
-//        if (parent.isLeftChild()) { // L
-//            _ = red(grand)
-//            if node.isLeftChild() { // LL
-//                _ = black(parent)
-//            } else { // LR
-//                _ = black(node)
-//                rotateLeft( parent)
-//            }
-//            rotateRight(grand)
-//        } else { // R
-//            _ = red(grand)
-//            if node.isLeftChild() { // RL
-//                _ = black(node)
-//                rotateRight(parent)
-//            } else { // RR
-//                _ = black(parent)
-//            }
-//            rotateLeft( grand)
-//        }
-//    }
-//    
-//    // 左旋转
-//    private func rotateLeft(_ grand: Node<K, V>?) {
-//        guard let grand = grand else {
-//            return
-//        }
-//        let parent = grand.right
-//        let child = parent?.left
-//        grand.right = child
-//        parent?.left = grand
-//        
-//        afterRotate(grand: grand, parent: parent, child: child)
-//    }
-//    
-//    // 右旋转
-//    private func rotateRight(_ grand: Node<K, V>?) {
-//        guard let grand = grand else {
-//            return
-//        }
-//        let parent = grand.left
-//        let child = parent?.right
-//        grand.left = child
-//        parent?.right = grand
-//        
-//        afterRotate(grand: grand, parent: parent, child: child)
-//    }
-//    
-//    
-//    private func afterRotate(grand: Node<K, V>, parent: Node<K, V>?, child: Node<K, V>?) {
-//        // 让parent称为子树的根节点
-//        parent?.parent = grand.parent
-//        if grand.isLeftChild() {
-//            grand.parent?.left = parent
-//        } else if (grand.isRightChild()) {
-//            grand.parent?.right = parent
-//        } else {
-//            root = parent
-//        }
-//        
-//        if let child = child {
-//            child.parent = grand
-//        }
-//        
-//        grand.parent = parent
-//    }
-//    
-//    /// 染红
-//    private func red(_ node:Node<K, V>?) -> Node<K, V>? {
-//        return color(node: node, color: RED)
-//    }
-//    
-//    /// 染黑
-//    private func black(_ node:Node<K, V>?) -> Node<K, V>? {
-//        return color(node: node, color: BLACK)
-//    }
-//    
-//    /// 染色
-//    private func color(node:Node<K, V>?,
-//                       color: Bool) -> Node<K, V>?
-//    {
-//        guard let node = node else { return nil }
-//        node.color = color
-//        return node
-//    }
-//    
-//    /// 判断节点是否是黑色
-//    private func isBlack(_ node: Node<K, V>?) -> Bool {
-//        return colorOf(node) == BLACK
-//    }
-//    
-//    /// 判断节点是否是黑色
-//    private func isRed(_ node: Node<K, V>?) -> Bool {
-//        return colorOf(node) == RED
-//    }
-//    
-//    /// 获取节点的颜色
-//    private func colorOf(_ node: Node<K, V>?) -> Bool {
-//        return node == nil ? BLACK : node!.color
-//    }
-//}
+
+import Foundation
+
+// 桶数组容量保持为2的幂，初始容量为16
+let DEFAULT_INITIAL_CAPACITY: Int = 16
+
+/// 自己实现的哈希表，每个桶使用红黑树存储键值对
+public class HashMap<K: Hashable, V: Equatable>: Map {
+
+    private var size = 0
+    // FixedSizeArray的下标本身返回可选值，不需要再次包装Node?
+    private var table = FixedSizeArray<Node>(capacity: DEFAULT_INITIAL_CAPACITY)
+
+    public init() {}
+
+    public func getSize() -> Int {
+        return size
+    }
+
+    public func isEmpty() -> Bool {
+        return size == 0
+    }
+
+    public func clear() {
+        for i in 0..<table.length {
+            table[i] = nil
+        }
+        size = 0
+    }
+
+    /// 添加或覆盖键值对，覆盖时返回旧值；不存储nil键
+    @discardableResult
+    public func put(key: K?, value: V) -> V? {
+        guard let key = key else { return nil }
+        let hash = hash(key: key)
+
+        if let existing = node(key: key, hash: hash) {
+            let oldValue = existing.value
+            existing.value = value
+            return oldValue
+        }
+
+        resizeIfNeeded()
+        let newNode = Node(key: key, value: value, hash: hash)
+        insert(newNode, at: index(hash: hash))
+        size += 1
+        return nil
+    }
+
+    public func get(key: K) -> V? {
+        return node(key: key, hash: hash(key: key))?.value
+    }
+
+    public func remove(key: K) {
+        guard var removed = node(key: key, hash: hash(key: key)) else { return }
+        size -= 1
+
+        // 度为2时，用右子树中最小的节点覆盖，再删除后继节点
+        if removed.left != nil, var successor = removed.right {
+            while let left = successor.left {
+                successor = left
+            }
+            removed.key = successor.key
+            removed.value = successor.value
+            removed.hash = successor.hash
+            removed = successor
+        }
+
+        let bucketIndex = index(hash: removed.hash)
+        let parent = removed.parent
+        let isLeft = removed === parent?.left
+        let replacement = removed.left ?? removed.right
+
+        replacement?.parent = parent
+        if let parent = parent {
+            if isLeft {
+                parent.left = replacement
+            } else {
+                parent.right = replacement
+            }
+        } else {
+            table[bucketIndex] = replacement
+        }
+
+        if removed.color == .black {
+            afterRemove(replacement, parent: parent, isLeft: isLeft, at: bucketIndex)
+        }
+
+        removed.parent = nil
+        removed.left = nil
+        removed.right = nil
+    }
+
+    public func containsKey(key: K) -> Bool {
+        return node(key: key, hash: hash(key: key)) != nil
+    }
+
+    public func containsValue(value: V?) -> Bool {
+        guard let value = value else { return false }
+
+        for i in 0..<table.length {
+            guard let root = table[i] else { continue }
+            var stack = [root]
+            while let current = stack.popLast() {
+                if current.value == value { return true }
+                if let left = current.left { stack.append(left) }
+                if let right = current.right { stack.append(right) }
+            }
+        }
+        return false
+    }
+
+    private enum Color {
+        case red
+        case black
+    }
+
+    private class Node {
+        var key: K
+        var value: V
+        var hash: Int
+        var color: Color = .red
+        var left: Node?
+        var right: Node?
+        // 子节点由父节点持有，反向引用使用weak，避免循环引用
+        weak var parent: Node?
+
+        init(key: K, value: V, hash: Int) {
+            self.key = key
+            self.value = value
+            self.hash = hash
+        }
+    }
+
+    private func hash(key: K) -> Int {
+        let hash = UInt(bitPattern: key.hashValue)
+        return Int(bitPattern: hash ^ (hash >> 16))
+    }
+
+    private func index(hash: Int) -> Int {
+        return hash & (table.length - 1)
+    }
+
+    private func node(key: K, hash: Int) -> Node? {
+        return node(in: table[index(hash: hash)], key: key, hash: hash)
+    }
+
+    private func node(in root: Node?, key: K, hash: Int) -> Node? {
+        guard let root = root else { return nil }
+        if hash < root.hash {
+            return node(in: root.left, key: key, hash: hash)
+        }
+        if hash > root.hash {
+            return node(in: root.right, key: key, hash: hash)
+        }
+        if key == root.key { return root }
+
+        // 哈希相同不代表键相同；旋转后碰撞节点可能出现在两侧
+        return node(in: root.left, key: key, hash: hash)
+            ?? node(in: root.right, key: key, hash: hash)
+    }
+
+    /// 插入已经确认不存在的节点，不改变size，供扩容时复用
+    private func insert(_ newNode: Node, at bucketIndex: Int) {
+        guard let root = table[bucketIndex] else {
+            newNode.color = .black
+            table[bucketIndex] = newNode
+            return
+        }
+
+        var current: Node? = root
+        var parent = root
+        var isLeft = false
+        while let node = current {
+            parent = node
+            // 同哈希的不同键先挂到右侧，查找时会检查两侧
+            isLeft = newNode.hash < node.hash
+            current = isLeft ? node.left : node.right
+        }
+
+        newNode.parent = parent
+        if isLeft {
+            parent.left = newNode
+        } else {
+            parent.right = newNode
+        }
+        afterPut(newNode, at: bucketIndex)
+    }
+
+    private func resizeIfNeeded() {
+        // 在下一次插入会超过0.75负载因子时，将桶数组扩为两倍
+        guard size >= table.length - table.length / 4 else { return }
+        let oldTable = table
+        table = FixedSizeArray<Node>(capacity: oldTable.length << 1)
+
+        for i in 0..<oldTable.length {
+            guard let root = oldTable[i] else { continue }
+            var stack = [root]
+            while let current = stack.popLast() {
+                // 先保留旧子节点，再清理关系并插入新桶
+                if let left = current.left { stack.append(left) }
+                if let right = current.right { stack.append(right) }
+                current.left = nil
+                current.right = nil
+                current.parent = nil
+                current.color = .red
+                insert(current, at: index(hash: current.hash))
+            }
+            oldTable[i] = nil
+        }
+    }
+
+    private func afterPut(_ node: Node, at bucketIndex: Int) {
+        guard let parent = node.parent else {
+            node.color = .black
+            return
+        }
+        if isBlack(parent) { return }
+        guard let grand = parent.parent else {
+            parent.color = .black
+            return
+        }
+
+        let parentIsLeft = parent === grand.left
+        let uncle = parentIsLeft ? grand.right : grand.left
+        grand.color = .red
+
+        if isRed(uncle) {
+            parent.color = .black
+            uncle?.color = .black
+            afterPut(grand, at: bucketIndex)
+            return
+        }
+
+        if parentIsLeft {
+            if node === parent.left { // LL
+                parent.color = .black
+            } else { // LR
+                node.color = .black
+                rotateLeft(parent, at: bucketIndex)
+            }
+            rotateRight(grand, at: bucketIndex)
+        } else {
+            if node === parent.right { // RR
+                parent.color = .black
+            } else { // RL
+                node.color = .black
+                rotateRight(parent, at: bucketIndex)
+            }
+            rotateLeft(grand, at: bucketIndex)
+        }
+    }
+
+    private func afterRemove(
+        _ replacement: Node?,
+        parent: Node?,
+        isLeft: Bool,
+        at bucketIndex: Int
+    ) {
+        if isRed(replacement) {
+            replacement?.color = .black
+            return
+        }
+
+        var current = replacement
+        var parent = parent
+        var isLeft = isLeft
+
+        while let ancestor = parent {
+            let left = current.map { $0 === ancestor.left } ?? isLeft
+            var sibling = left ? ancestor.right : ancestor.left
+
+            // 红兄弟先旋转，转成黑兄弟的情况
+            if isRed(sibling) {
+                sibling?.color = .black
+                ancestor.color = .red
+                if left {
+                    rotateLeft(ancestor, at: bucketIndex)
+                    sibling = ancestor.right
+                } else {
+                    rotateRight(ancestor, at: bucketIndex)
+                    sibling = ancestor.left
+                }
+            }
+
+            if isBlack(sibling?.left) && isBlack(sibling?.right) {
+                sibling?.color = .red
+                if isRed(ancestor) {
+                    ancestor.color = .black
+                    return
+                }
+                // 父节点也是黑色，将下溢向上继续处理
+                current = ancestor
+                parent = ancestor.parent
+                isLeft = ancestor === parent?.left
+                continue
+            }
+
+            if left {
+                if isBlack(sibling?.right) {
+                    sibling?.left?.color = .black
+                    sibling?.color = .red
+                    if let sibling = sibling {
+                        rotateRight(sibling, at: bucketIndex)
+                    }
+                    sibling = ancestor.right
+                }
+                sibling?.color = ancestor.color
+                ancestor.color = .black
+                sibling?.right?.color = .black
+                rotateLeft(ancestor, at: bucketIndex)
+            } else {
+                if isBlack(sibling?.left) {
+                    sibling?.right?.color = .black
+                    sibling?.color = .red
+                    if let sibling = sibling {
+                        rotateLeft(sibling, at: bucketIndex)
+                    }
+                    sibling = ancestor.left
+                }
+                sibling?.color = ancestor.color
+                ancestor.color = .black
+                sibling?.left?.color = .black
+                rotateRight(ancestor, at: bucketIndex)
+            }
+            return
+        }
+        current?.color = .black
+    }
+
+    private func rotateLeft(_ grand: Node, at bucketIndex: Int) {
+        guard let parent = grand.right else { return }
+        let child = parent.left
+        grand.right = child
+        parent.left = grand
+        afterRotate(grand: grand, parent: parent, child: child, at: bucketIndex)
+    }
+
+    private func rotateRight(_ grand: Node, at bucketIndex: Int) {
+        guard let parent = grand.left else { return }
+        let child = parent.right
+        grand.left = child
+        parent.right = grand
+        afterRotate(grand: grand, parent: parent, child: child, at: bucketIndex)
+    }
+
+    private func afterRotate(grand: Node, parent: Node, child: Node?, at bucketIndex: Int) {
+        let grandParent = grand.parent
+        let wasLeft = grand === grandParent?.left
+        parent.parent = grandParent
+        if let grandParent = grandParent {
+            if wasLeft {
+                grandParent.left = parent
+            } else {
+                grandParent.right = parent
+            }
+        } else {
+            // 每个桶有自己的根节点
+            table[bucketIndex] = parent
+        }
+        child?.parent = grand
+        grand.parent = parent
+    }
+
+    private func isBlack(_ node: Node?) -> Bool {
+        return node?.color != .red
+    }
+
+    private func isRed(_ node: Node?) -> Bool {
+        return node?.color == .red
+    }
+}
