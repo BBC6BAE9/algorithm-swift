@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol MapProtocol<K, V> {
+protocol Map<K, V> {
     associatedtype K
     associatedtype V
     

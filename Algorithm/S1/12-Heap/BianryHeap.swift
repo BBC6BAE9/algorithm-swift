@@ -214,8 +214,3 @@ class BinaryHeap<E: Comparable>: AbstractHeap<E> {
     }
 }
 
-class Solution {
-    func topK() {
-        
-    }
-}

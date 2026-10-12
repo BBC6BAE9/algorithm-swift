@@ -7,7 +7,7 @@
 
 import Foundation
 
-class TreeMap<K: Comparable, V: Equatable>: MapProtocol {
+class TreeMap<K: Comparable, V: Equatable>: Map {
     
     public var size: Int = 0
         
