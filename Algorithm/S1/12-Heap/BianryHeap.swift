@@ -13,8 +13,6 @@ class BinaryHeap<E: Comparable>: AbstractHeap<E> {
     typealias E = E
     
     private var elements: FixedSizeArray<E>
-    
-    private var size = 0
 
     init(elements:[E]) {
         
@@ -24,13 +22,13 @@ class BinaryHeap<E: Comparable>: AbstractHeap<E> {
             return
         }
         
-        size = elements.count
         let capacity = max(DEFAULT_CAPACITY, elements.count)
         self.elements = FixedSizeArray<E>(capacity: capacity)
         for i in 0..<elements.count {
             self.elements[i] = elements[i]
         }
         super.init()
+        size = elements.count
         heapify()
         
     }
@@ -111,8 +109,11 @@ class BinaryHeap<E: Comparable>: AbstractHeap<E> {
         
         elements[0] = elements[lastIndex]
         elements[lastIndex] = nil
-        
-        siftDown(index: 0)
+
+        // 删除的是最后一个元素时堆已为空，不能再对0位置下滤
+        if size > 0 {
+            siftDown(index: 0)
+        }
         return root
     }
     

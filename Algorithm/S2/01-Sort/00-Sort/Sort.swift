@@ -86,6 +86,7 @@ class Sort<E: Comparable>  {
 /// 冒泡排序优化1
 /// 思路：如果给出的序列已经完全有序，可以提前终止冒泡排序
 func bubbleSort1(array: inout [Int]) {
+    if array.count < 2 { return } // 否则 1..<0 会崩溃
     for end in (1..<array.count).reversed() {
         var sorted = true
         for begin in 1...end {
@@ -125,6 +126,7 @@ func bubbleSort2(array: inout [Int]) {
 
 /// 选择排序
 func selelctionSort(array: inout [Int]) {
+    if array.count < 2 { return } // 否则 1..<0 会崩溃
     for end in (1..<array.count).reversed() {
         var maxIndex = 0
         for begin in 1...end {

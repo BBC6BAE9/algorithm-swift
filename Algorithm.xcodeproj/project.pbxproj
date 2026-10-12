@@ -83,6 +83,8 @@
 				"S2/01-Sort/03-HeapSort/HeapSort.swift",
 				"S2/01-Sort/04-InsertionSort/BinarySearch/BinarySearch.swift",
 				"S2/01-Sort/04-InsertionSort/InsertionSort.swift",
+				"S2/01-Sort/05-MergeSort/MergeSort.swift",
+				"S2/01-Sort/06-QuickSort/QuickSort.swift",
 				"S2/02-UnionFind/UnionFind.swift",
 				"S2/03-Graph/Graph.swift",
 				"S2/03-Graph/ListGraph.swift",

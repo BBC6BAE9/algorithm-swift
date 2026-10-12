@@ -20,7 +20,7 @@ class Solution206 {
     
     // 递归的解决方法
     func reverseList1(_ head: Solution206.ListNode?) -> Solution206.ListNode? {
-        if head == nil,
+        if head == nil ||
            head?.next == nil // 头节点没有next，说明只有一个节点，反转之后还是自己
         {
             return head
@@ -34,7 +34,7 @@ class Solution206 {
     
     func reverseList2(_ head: Solution206.ListNode?) -> Solution206.ListNode? {
         var head = head
-        if head == nil,
+        if head == nil ||
            head?.next == nil // 头节点没有next，说明只有一个节点，反转之后还是自己
         {
             return head

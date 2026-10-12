@@ -29,7 +29,8 @@ class AbstractHeap<E: Comparable>: Heap {
         fatalError()
     }
     
-    private var size = 0
+    // 子类直接维护这个计数，getSize()/isEmpty()才能反映真实的元素数量
+    var size = 0
     
     func getSize() -> Int {
         return size

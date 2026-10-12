@@ -56,14 +56,14 @@ class Solution226 {
             return nil
         }
 
-        _ = invertTree2(root.left)
+        _ = invertTree3(root.left)
         
         let tmpNode = root.left
         root.left = root.right
         root.right = tmpNode
         
         // 关键改动 <-
-        _ = invertTree2(root.left)
+        _ = invertTree3(root.left)
 
      
         return root

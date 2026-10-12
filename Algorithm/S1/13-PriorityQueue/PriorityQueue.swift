@@ -28,11 +28,13 @@ class PriorityQueue<E: Comparable> {
     
     // 出队
     func deQueue() -> E? {
+        if heap.isEmpty() { return nil }
         return heap.remove()
     }
     
     /// 获取队头元素
     func front() -> E? {
+        if heap.isEmpty() { return nil }
         return heap.get()
     }
 }

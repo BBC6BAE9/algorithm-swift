@@ -293,14 +293,14 @@ class TreeMap<K: Comparable, V: Equatable>: Map {
             replacementNode?.parent = node.parent
             if node.parent == nil {
                 root = replacementNode
-            }else if node == node.parent?.left {
+            }else if node === node.parent?.left {
                 node.parent?.left = replacementNode
             }else {
                 node.parent?.right = replacementNode
             }
             
-            // 删除节点之后的处理
-            afterRemove(node: node)
+            // 删除节点之后的处理：红黑树需要拿到替代节点来染黑
+            afterRemove(node: replacementNode!)
             
         } else if(node.parent == nil){ // node是叶子节点且是根节点
             root = nil
@@ -308,7 +308,7 @@ class TreeMap<K: Comparable, V: Equatable>: Map {
             // 删除节点之后的处理
             afterRemove(node: node)
         }else{ // node是叶子节点，但不是根节点
-            if(node == node.parent?.left) {
+            if(node === node.parent?.left) {
                 node.parent?.left = nil
             } else {
                 node.parent?.right = nil
@@ -425,7 +425,7 @@ class TreeMap<K: Comparable, V: Equatable>: Map {
         }
         
         // 从父节点、祖父节点中寻找前驱节点
-        while(node?.parent != nil && node == node?.parent?.left){
+        while(node?.parent != nil && node === node?.parent?.left){
             node = node?.parent
         }
         
@@ -439,17 +439,17 @@ class TreeMap<K: Comparable, V: Equatable>: Map {
             return nil
         }
         
-        // 前驱节点在左子树中（right.left.left.left...）
-        if let leftNode = node?.right {
-            var p: Node<K, V>? = leftNode
-            while (p?.right != nil){
+        // 后继节点在右子树中（right.left.left.left...）
+        if let rightNode = node?.right {
+            var p: Node<K, V>? = rightNode
+            while (p?.left != nil){
                 p = p?.left
             }
             return p
         }
         
-        // 从父节点、祖父节点中寻找前驱节点
-        while(node?.parent != nil && node == node?.parent?.right){
+        // 从父节点、祖父节点中寻找后继节点
+        while(node?.parent != nil && node === node?.parent?.right){
             node = node?.parent
         }
         
@@ -467,7 +467,8 @@ class TreeMap<K: Comparable, V: Equatable>: Map {
         
         var left: Node<K1, V1>?
         var right: Node<K1, V1>?
-        var parent: Node<K1, V1>?
+        // 子节点由父节点强引用，反向引用使用weak，避免循环引用导致整棵树无法释放
+        weak var parent: Node<K1, V1>?
         
         init(key: K1, value: V1, parent: Node<K1, V1>?) {
             self.key = key
@@ -487,12 +488,12 @@ class TreeMap<K: Comparable, V: Equatable>: Map {
         
         /// 当前节点是否是父节点的左子节点
         func isLeftChild() -> Bool {
-            return parent != nil && self == parent?.left
+            return parent != nil && self === parent?.left
         }
         
         /// 当前节点是否是父节点的右子节点
         func isRightChild() -> Bool {
-            return parent != nil && self == parent?.right
+            return parent != nil && self === parent?.right
         }
         
         /// 访问兄弟节点
